@@ -14,6 +14,8 @@ class _MyAppState extends State<MyApp> {
 
   List<bool> _selection = [true, false, false];
 
+  String tip;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -22,6 +24,14 @@ class _MyAppState extends State<MyApp> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              if (tip != null)
+                Padding(
+                  padding: EdgeInsets.all(30),
+                  child: Text(
+                    tip,
+                    style: TextStyle(fontSize: 30.0),
+                  ),
+                ),
               Text('Total Amount'),
               SizedBox(
                 width: 100.00,
@@ -41,7 +51,7 @@ class _MyAppState extends State<MyApp> {
                 ),
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: calculateTip,
                 child: Text('Calculate Tip'),
                 style: TextButton.styleFrom(
                     primary: Colors.white, backgroundColor: Colors.green),
@@ -58,6 +68,18 @@ class _MyAppState extends State<MyApp> {
       for (int i = 0; i < _selection.length; i++) {
         _selection[i] = selectionIndex == i;
       }
+    });
+  }
+
+  void calculateTip() {
+    final totalAmount = double.parse(amount.text);
+    final selectedIndex = _selection.indexWhere((element) => element);
+    final tipPercentage = [0.1, 0.15, 0.2][selectedIndex];
+
+    final tipTotal = (totalAmount * tipPercentage).toStringAsFixed(2);
+
+    setState(() {
+      tip = '\$$tipTotal';
     });
   }
 }
